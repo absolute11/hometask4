@@ -17,28 +17,24 @@ public class Main {
         }
 
         // 1. Найти количество несовершеннолетних
-        long underageCount = persons.stream()
+        System.out.println("Количество несовершеннолетних: " + persons.stream()
                 .filter(person -> person.getAge() < 18)
-                .count();
-        System.out.println("Количество несовершеннолетних: " + underageCount);
+                .count());
 
         // 2. Получить список фамилий призывников
-        List<String> conscripts = persons.stream()
+        System.out.println("Список фамилий призывников: " + persons.stream()
                 .filter(person -> person.getSex() == Sex.MAN && person.getAge() >= 18 && person.getAge() <= 27)
                 .map(Person::getFamily)
-                .collect(Collectors.toList());
-        System.out.println("Список фамилий призывников: " + conscripts);
+                .collect(Collectors.toList()));
 
         // 3. Получить отсортированный по фамилии список потенциально работоспособных людей с высшим образованием
-        List<Person> potentialWorkers = persons.stream()
-                .filter(person -> (person.getSex() == Sex.WOMAN && person.getAge() >= 18 && person.getAge() <= 60) ||
-                        (person.getSex() == Sex.MAN && person.getAge() >= 18 && person.getAge() <= 65))
-                .filter(person -> person.getEducation() == Education.HIGHER)
-                .sorted(Comparator.comparing(Person::getFamily))
-                .collect(Collectors.toList());
-
         System.out.println("Отсортированный список потенциально работоспособных людей с высшим образованием: ");
-        potentialWorkers.forEach(System.out::println);
+        persons.stream()
+                .filter(person -> person.getEducation() == Education.HIGHER)
+                .filter(person -> person.getAge() > 18)
+                .filter(person -> (person.getSex() == Sex.WOMAN && person.getAge() <= 60) || (person.getSex() == Sex.MAN && person.getAge() <= 65))
+                .sorted(Comparator.comparing(Person::getFamily))
+                .forEach(System.out::println);
     }
 }
 
